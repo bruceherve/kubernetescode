@@ -1,36 +1,51 @@
+podTemplate(containers: [
+    containerTemplate(
+        name: 'jnlp', 
+        image: 'jenkins/inbound-agent'
+        )
+  ]) {
+
 podTemplate {
     node(POD_LABEL) {
         def app
 
     stage('Clone repository') {
-
-
-        checkout scm
+      
+         checkout scm
     }
 
     stage('Build image') {
+       container('jnlp'){
+           app = docker.build("hernino/test")
+       }
 
-       app = docker.build("hernino/test")
+      
     }
 
     stage('Test image') {
-
-
-        app.inside {
+        container('jnlp'){
+            app.inside {
             sh 'echo "Tests passed"'
+          } 
         }
     }
 
     stage('Push image') {
-
-        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+          container('jnlp'){
+              docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
             app.push("${env.BUILD_NUMBER}")
-        }
+              }
+          }
+
+       
     }
 
     stage('Trigger ManifestUpdate') {
-                echo "triggering updatemanifestjob"
+                container('jnlp'){
+                    echo "triggering updatemanifestjob"
                 build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+                }
+                
         }
 
     }
