@@ -5,7 +5,6 @@ podTemplate(containers: [
         )
   ]) {
 
-podTemplate {
     node(POD_LABEL) {
         def app
 
@@ -33,7 +32,7 @@ podTemplate {
     stage('Push image') {
           container('jnlp'){
               docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-            app.push("${env.BUILD_NUMBER}")
+              app.push("${env.BUILD_NUMBER}")
               }
           }
 
@@ -43,10 +42,10 @@ podTemplate {
     stage('Trigger ManifestUpdate') {
                 container('jnlp'){
                     echo "triggering updatemanifestjob"
-                build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+                    build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
                 }
                 
         }
 
     }
-}
+  }
