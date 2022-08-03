@@ -1,4 +1,4 @@
-node(POD_LABEL) {
+node {
     def app
 
     stage('Clone repository') {
