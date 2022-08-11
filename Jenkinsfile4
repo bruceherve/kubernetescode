@@ -8,7 +8,10 @@ podTemplate(containers:[
         stage('Test Shell'){
             container('jnlp'){
                 stage('Shell execution'){
-                    sh ' echo Testing shell execution'
+                    sh 'echo Testing shell execution'
+                }
+                stage('Testing Docker'){
+                    sh 'docker version'
                 }
             }
         }
