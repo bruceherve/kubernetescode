@@ -1,7 +1,16 @@
-podTemplate{
-    node(POD_LABEL){
-        stage('Test Docker'){
-            sh 'docker version'
+pipeline{
+    agent any 
+    stages{
+        stage('Test Docker availability'){
+            agent{
+                docker{
+                    image 'jenkins/inbound-agent'
+                }
+            }
+            steps{
+                sh 'echo Testing Docker'
+                sh 'docker version'
+            }
         }
     }
 }
