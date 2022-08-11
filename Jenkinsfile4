@@ -1,10 +1,7 @@
-pipeline{
-    agent{label'kubeagent'}
-    stages{
-        stage('Run Docker'){
-            steps{
-                sh 'docker version'
-            }
+podTemplate{
+    node(POD_LABEL){
+        stage('Test Docker'){
+            sh 'docker version'
         }
     }
 }
