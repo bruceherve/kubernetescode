@@ -10,7 +10,7 @@ podTemplate(containers: [
 
     stage('Clone repository') {
       
-         checkout scm
+         git 'https://github.com/bruceherve/kubernetescode.git'
     }
 
     stage('Build image') {
