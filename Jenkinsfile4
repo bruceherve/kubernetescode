@@ -1,17 +1,29 @@
-podTemplate(containers:[
-    containerTemplate(
-        name: 'jnlp',
-        image: 'jenkins/inbound-agent'
-    )
-]) {
-    node(POD_LABEL){
-        stage('Test Shell'){
-            container('jnlp'){
-                stage('Shell execution'){
-                    sh 'echo Testing shell execution'
-                }
-                stage('Testing Docker'){
-                    sh 'docker version'
+pipeline {
+    agent {
+        kubernetes {
+            label "kubeagent"
+            cloud "kubernetes"
+            yaml '''
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: devops-tools
+  labels:
+    job: pipeline-build-pod
+spec:
+  containers:
+  - name: pipeline-container
+    image: alpine:latest
+    tty: true
+    command: ['cat']
+'''
+        }
+    }
+    stages {
+        stage("First") {
+            steps {
+                container("pipeline-container") {
+                    sh "echo Welcome to jenkins k8s pipeline"
                 }
             }
         }
