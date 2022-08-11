@@ -1,15 +1,15 @@
-pipeline{
-    agent any 
-    stages{
-        stage('Test Docker availability'){
-            agent{
-                docker{
-                    image 'jenkins/inbound-agent'
+podTemplate(label: 'kubeagent', containers:[
+    containerTemplate(
+        name: 'jnlp',
+        image: 'jenkins/inbound-agent'
+    )
+]) {
+    node(POD_LABEL){
+        stage('Test Shell'){
+            container('jnlp'){
+                stage('Shell execution'){
+                    sh 'Testing shell execution'
                 }
-            }
-            steps{
-                sh 'echo Testing Docker'
-                sh 'docker version'
             }
         }
     }
