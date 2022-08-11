@@ -11,6 +11,10 @@ podTemplate(containers: [
     stage('Clone repository') {
       
          git 'https://github.com/bruceherve/kubernetescode.git'
+         container('jnlp'){
+             sh 'echo cloned the repo'
+         }
+         
     }
 
     stage('Build image') {
