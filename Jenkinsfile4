@@ -1,31 +1,38 @@
+
 pipeline {
-    agent {
-        kubernetes {
-            label "kubeagent"
-            cloud "kubernetes"
-            yaml '''
-apiVersion: v1
-kind: Pod
-metadata:
-  namespace: devops-tools
-  labels:
-    job: pipeline-build-pod
-spec:
-  containers:
-  - name: pipeline-container
-    image: alpine:latest
-    tty: true
-    command: ['cat']
-'''
-        }
+  agent {
+    kubernetes {
+      yaml '''
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          labels:
+            some-label: some-label-value
+        spec:
+          containers:
+          - name: maven
+            image: maven:alpine
+            command:
+            - cat
+            tty: true
+          - name: busybox
+            image: busybox
+            command:
+            - cat
+            tty: true
+        '''
     }
-    stages {
-        stage("First") {
-            steps {
-                container("pipeline-container") {
-                    sh "echo Welcome to jenkins k8s pipeline"
-                }
-            }
+  }
+  stages {
+    stage('Run maven') {
+      steps {
+        container('maven') {
+          sh 'mvn -version'
         }
+        container('busybox') {
+          sh '/bin/busybox'
+        }
+      }
     }
+  }
 }
