@@ -8,6 +8,10 @@ pipeline {
           labels:
             app: jenkins
         spec:
+          serviceAccountName: jenkins-admin
+          securityContext:
+            fsGroup: 1000
+            runAsUser: 1000
           containers:
           - name: docker
             image: docker:dind
