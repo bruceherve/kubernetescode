@@ -1,4 +1,5 @@
-pipeline {
+
+      pipeline {
   agent {
     kubernetes {
       yaml '''
@@ -22,14 +23,13 @@ pipeline {
     }
   }
   stages {
+    stage('Prepare'){
+        checkout scm
+    }
     stage('Check Docker Vesrion') {
-      steps {
         container('docker') {
           sh 'docker version'
         }
-      }
     }
   }
 }
-
- 
