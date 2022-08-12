@@ -13,6 +13,8 @@ pipeline {
             fsGroup: 1000
             runAsUser: 1000
           containers:
+          - name: jnlp
+            image: jenkins/inbound-agent
           - name: docker
             image: docker:dind
             volumeMounts:
