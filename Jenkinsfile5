@@ -1,19 +1,19 @@
-podTemplate(cloud: 'kubernetes', serviceAccount: 'jenkins-admin',
-       containers: [
-         containerTemplate(name: 'docker', image: 'docker:dind', ttyEnabled: true, command: 'cat', privileged: true,)
-       ],
-       volumes: [
-        hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')
-    ]) {
-        node('POD_LABEL'){
-            stage('prepare'){
-                checkout scm 
-            }
-
-            stage('Check Docker Version'){
-                container('docker'){
-                    sh "docker version"
+podTemplate(containers: [
+    containerTemplate(
+        name: 'docker', 
+        image: 'docker:dind'
+        )],
+        volumes: [
+              hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')
+        ]) {
+            node('POD_LABEL'){
+                stage('Prepare'){
+                    checkout scm
+                }
+                stage('Check Docker Version'){
+                    container('docker'){
+                        sh "docker version"
+                    }
                 }
             }
         }
-    }
