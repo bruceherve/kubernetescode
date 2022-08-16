@@ -5,8 +5,8 @@ FROM python:3.11-rc-slim-buster
 WORKDIR /app
 
 COPY requirements.txt requirements.txt
-RUN  apt update
-RUN apt install python3-pip
+RUN  curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+RUN python3.8 get-pip.py
 RUN pip3 install -r requirements.txt
 
 COPY . .
