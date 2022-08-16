@@ -5,8 +5,8 @@ FROM python:3.11-rc-slim-buster
 WORKDIR /app
 
 COPY requirements.txt requirements.txt
-RUN  sudo apt update
-RUN sudo apt install python3-pip
+RUN  apt update
+RUN apt install python3-pip
 RUN pip3 install -r requirements.txt
 
 COPY . .
